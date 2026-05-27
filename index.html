@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>多行转单行</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; justify-content: center; padding: 40px 20px; }
+.container { width: 100%; max-width: 900px; }
+h1 { font-size: 22px; margin-bottom: 20px; color: #333; }
+.row { display: flex; gap: 16px; margin-bottom: 16px; }
+.col { flex: 1; }
+textarea { width: 100%; height: 300px; border: 1px solid #d9d9d9; border-radius: 6px; padding: 12px; font-size: 14px; font-family: monospace; resize: vertical; outline: none; }
+textarea:focus { border-color: #4096ff; }
+label { display: block; margin-bottom: 6px; font-size: 14px; color: #666; }
+.options { display: flex; gap: 20px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.options label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 14px; color: #333; }
+.options input[type="text"] { width: 60px; border: 1px solid #d9d9d9; border-radius: 4px; padding: 4px 8px; font-size: 14px; outline: none; }
+.options input[type="text"]:focus { border-color: #4096ff; }
+.btn-row { display: flex; gap: 10px; margin-bottom: 16px; }
+button { padding: 8px 20px; border: 1px solid #d9d9d9; border-radius: 6px; background: #fff; font-size: 14px; cursor: pointer; }
+button:hover { border-color: #4096ff; color: #4096ff; }
+button.primary { background: #4096ff; color: #fff; border-color: #4096ff; }
+button.primary:hover { background: #1677ff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>多行文本转单行</h1>
+
+  <div class="options">
+    <label>分隔符：<input type="text" id="sep" value=" " placeholder="空格"/></label>
+    <label><input type="checkbox" id="trim" checked/>去除首尾空格</label>
+    <label><input type="checkbox" id="skipEmpty" checked/>跳过空行</label>
+    <label><input type="checkbox" id="dedup"/>去重</label>
+  </div>
+
+  <div class="btn-row">
+    <button class="primary" onclick="convert()">转换 ↓</button>
+    <button onclick="copyResult()">复制结果</button>
+    <button onclick="clearAll()">清空</button>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <label>输入（多行）</label>
+      <textarea id="input" placeholder="在这里粘贴多行文本..."></textarea>
+    </div>
+    <div class="col">
+      <label>输出（单行）</label>
+      <textarea id="output" readonly></textarea>
+    </div>
+  </div>
+</div>
+
+<script>
+function convert() {
+  const sep = document.getElementById('sep').value;
+  const trim = document.getElementById('trim').checked;
+  const skipEmpty = document.getElementById('skipEmpty').checked;
+  const dedup = document.getElementById('dedup').checked;
+
+  let lines = document.getElementById('input').value.split('\n');
+  if (trim) lines = lines.map(l => l.trim());
+  if (skipEmpty) lines = lines.filter(l => l.length > 0);
+  if (dedup) lines = [...new Set(lines)];
+
+  document.getElementById('output').value = lines.join(sep);
+}
+
+function copyResult() {
+  const output = document.getElementById('output');
+  if (!output.value) return;
+  navigator.clipboard.writeText(output.value).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '已复制';
+    setTimeout(() => btn.textContent = orig, 1000);
+  });
+}
+
+function clearAll() {
+  document.getElementById('input').value = '';
+  document.getElementById('output').value = '';
+}
+
+document.getElementById('input').addEventListener('input', convert);
+document.querySelectorAll('.options input').forEach(el => el.addEventListener('change', convert));
+document.getElementById('sep').addEventListener('input', convert);
+</script>
+</body>
+</html>
