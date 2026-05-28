@@ -2,54 +2,316 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>竞品快速跳转</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; padding: 40px 20px; }
-.container { max-width: 900px; margin: 0 auto; }
-h1 { font-size: 22px; margin-bottom: 20px; color: #333; }
-.input-area { margin-bottom: 20px; }
-label { display: block; margin-bottom: 6px; font-size: 14px; color: #666; }
-textarea { width: 100%; height: 120px; border: 1px solid #d9d9d9; border-radius: 6px; padding: 12px; font-size: 14px; font-family: monospace; resize: vertical; outline: none; }
-textarea:focus { border-color: #4096ff; }
-.hint { font-size: 12px; color: #999; margin-top: 4px; }
-.btn-row { display: flex; gap: 10px; margin-bottom: 24px; }
-button { padding: 8px 20px; border: 1px solid #d9d9d9; border-radius: 6px; background: #fff; font-size: 14px; cursor: pointer; }
-button:hover { border-color: #4096ff; color: #4096ff; }
-button.primary { background: #4096ff; color: #fff; border-color: #4096ff; }
-button.primary:hover { background: #1677ff; }
-.result-area { display: none; }
-.keyword-block { background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; }
-.keyword-title { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f0f0f0; }
-.platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.platform-link { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid #e8e8e8; border-radius: 6px; text-decoration: none; color: #333; font-size: 14px; transition: all 0.2s; }
-.platform-link:hover { border-color: #4096ff; color: #4096ff; background: #f0f7ff; }
-.platform-icon { width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #fff; flex-shrink: 0; }
+
+body {
+  font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0c29 0%, #1a1a3e 50%, #24243e 100%);
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* 背景装饰 */
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 60px 24px 80px;
+}
+
+/* 头部 */
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header p {
+  font-size: 16px;
+  color: rgba(255,255,255,0.5);
+  font-weight: 300;
+}
+
+/* 平台标签 */
+.platform-tags {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.platform-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.7);
+  backdrop-filter: blur(8px);
+}
+.platform-tag .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 输入区域 */
+.input-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 28px;
+  backdrop-filter: blur(20px);
+  margin-bottom: 20px;
+}
+.input-card label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+textarea {
+  width: 100%;
+  height: 140px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 15px;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  background: rgba(0,0,0,0.2);
+  color: #fff;
+  line-height: 1.7;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+textarea::placeholder { color: rgba(255,255,255,0.25); }
+textarea:focus {
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+.hint {
+  font-size: 12px;
+  color: rgba(255,255,255,0.3);
+  margin-top: 8px;
+}
+
+/* 按钮 */
+.btn-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.3px;
+}
+button.primary {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+}
+button.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+}
+button.primary:active {
+  transform: translateY(0);
+}
+button.secondary {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+button.secondary:hover {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.8);
+}
+
+/* 结果区域 */
+.result-area {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.open-all-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+.open-all-row button {
+  padding: 8px 20px;
+  font-size: 13px;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+}
+.open-all-row button:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+/* 关键词卡片 */
+.keyword-block {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.3s;
+}
+.keyword-block:hover {
+  border-color: rgba(255,255,255,0.15);
+}
+.keyword-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.platform-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  text-decoration: none;
+  color: rgba(255,255,255,0.8);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.25s;
+  background: rgba(255,255,255,0.02);
+}
+.platform-link:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.2);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.platform-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
 .platform-name { font-weight: 500; }
-.open-all-row { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+
+/* 响应式 */
+@media (max-width: 640px) {
+  .container { padding: 40px 16px 60px; }
+  .header h1 { font-size: 28px; }
+  .platform-grid { grid-template-columns: repeat(2, 1fr); }
+  .input-card { padding: 20px; }
+}
+
+/* 页脚 */
+.footer {
+  text-align: center;
+  margin-top: 48px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.2);
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>竞品快速跳转</h1>
 
-  <div class="input-area">
-    <label>输入商品关键词，一键搜遍全网竞品</label>
+  <div class="header">
+    <h1>竞品快速跳转</h1>
+    <p>输入商品关键词，一键搜遍全网竞品</p>
+  </div>
+
+  <div class="platform-tags">
+    <span class="platform-tag"><span class="dot" style="background:#e4393c"></span>京东</span>
+    <span class="platform-tag"><span class="dot" style="background:#ff0036"></span>天猫</span>
+    <span class="platform-tag"><span class="dot" style="background:#ff5000"></span>淘宝</span>
+    <span class="platform-tag"><span class="dot" style="background:#e02e24"></span>拼多多</span>
+    <span class="platform-tag"><span class="dot" style="background:#161823"></span>抖音</span>
+    <span class="platform-tag"><span class="dot" style="background:#ffb100"></span>美团买药</span>
+  </div>
+
+  <div class="input-card">
+    <label>输入商品关键词（每行一个）</label>
     <textarea id="keywords" placeholder="试试输入商品名，例如：&#10;iPhone 15 Pro 256G&#10;海天生抽 1.9L&#10;欧莱雅复颜玻尿酸水乳套装"></textarea>
-    <div class="hint">支持批量，每行一个关键词 · Cmd+Enter 快捷生成</div>
+    <div class="hint">支持批量输入 · 每行一个关键词 · Cmd+Enter 快捷生成</div>
   </div>
 
   <div class="btn-row">
     <button class="primary" onclick="generate()">🔍 一键搜全网</button>
-    <button onclick="clearAll()">清空</button>
+    <button class="secondary" onclick="clearAll()">清空</button>
   </div>
 
   <div class="result-area" id="resultArea">
     <div class="open-all-row">
-      <button onclick="openAll()">一键打开全部链接</button>
+      <button onclick="openAll()">↗ 一键打开全部链接</button>
     </div>
     <div id="results"></div>
   </div>
+
+  <div class="footer">竞品快速跳转工具 · 比价团队内部使用</div>
 </div>
 
 <script>
