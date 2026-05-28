@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>竞品快速跳转</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: #f5f5f5; min-height: 100vh; padding: 40px 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+h1 { font-size: 22px; margin-bottom: 20px; color: #333; }
+.input-area { margin-bottom: 20px; }
+label { display: block; margin-bottom: 6px; font-size: 14px; color: #666; }
+textarea { width: 100%; height: 120px; border: 1px solid #d9d9d9; border-radius: 6px; padding: 12px; font-size: 14px; font-family: monospace; resize: vertical; outline: none; }
+textarea:focus { border-color: #4096ff; }
+.hint { font-size: 12px; color: #999; margin-top: 4px; }
+.btn-row { display: flex; gap: 10px; margin-bottom: 24px; }
+button { padding: 8px 20px; border: 1px solid #d9d9d9; border-radius: 6px; background: #fff; font-size: 14px; cursor: pointer; }
+button:hover { border-color: #4096ff; color: #4096ff; }
+button.primary { background: #4096ff; color: #fff; border-color: #4096ff; }
+button.primary:hover { background: #1677ff; }
+.result-area { display: none; }
+.keyword-block { background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; }
+.keyword-title { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f0f0f0; }
+.platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.platform-link { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid #e8e8e8; border-radius: 6px; text-decoration: none; color: #333; font-size: 14px; transition: all 0.2s; }
+.platform-link:hover { border-color: #4096ff; color: #4096ff; background: #f0f7ff; }
+.platform-icon { width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #fff; flex-shrink: 0; }
+.platform-name { font-weight: 500; }
+.open-all-row { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>竞品快速跳转</h1>
+
+  <div class="input-area">
+    <label>输入商品关键词（每行一个）</label>
+    <textarea id="keywords" placeholder="iPhone 15 Pro 256G&#10;华为 Mate60 Pro&#10;小米14 Ultra"></textarea>
+    <div class="hint">支持批量输入，每行一个关键词，回车分隔</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="primary" onclick="generate()">生成跳转链接</button>
+    <button onclick="clearAll()">清空</button>
+  </div>
+
+  <div class="result-area" id="resultArea">
+    <div class="open-all-row">
+      <button onclick="openAll()">一键打开全部链接</button>
+    </div>
+    <div id="results"></div>
+  </div>
+</div>
+
+<script>
+const platforms = [
+  { name: '京东', key: 'jd', color: '#e4393c', url: kw => `https://search.jd.com/Search?keyword=${encodeURIComponent(kw)}&enc=utf-8` },
+  { name: '天猫', key: 'tmall', color: '#ff0036', url: kw => `https://list.tmall.com/search_product.htm?q=${encodeURIComponent(kw)}` },
+  { name: '淘宝', key: 'taobao', color: '#ff5000', url: kw => `https://s.taobao.com/search?q=${encodeURIComponent(kw)}` },
+  { name: '拼多多', key: 'pdd', color: '#e02e24', url: kw => `https://mobile.yangkeduo.com/search_result.html?search_key=${encodeURIComponent(kw)}` },
+  { name: '抖音', key: 'douyin', color: '#161823', url: kw => `https://www.douyin.com/search/${encodeURIComponent(kw)}?type=goods` },
+  { name: '美团买药', key: 'meituan', color: '#ffb100', url: kw => `https://meituan.com/s?keyword=${encodeURIComponent(kw)}` },
+];
+
+function generate() {
+  const text = document.getElementById('keywords').value.trim();
+  if (!text) return;
+
+  const keywords = text.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+  const container = document.getElementById('results');
+  container.innerHTML = '';
+
+  keywords.forEach(kw => {
+    const block = document.createElement('div');
+    block.className = 'keyword-block';
+    let linksHtml = '';
+    platforms.forEach(p => {
+      const url = p.url(kw);
+      linksHtml += `<a class="platform-link" href="${url}" target="_blank" rel="noreferrer">
+        <span class="platform-icon" style="background:${p.color}">${p.name[0]}</span>
+        <span class="platform-name">${p.name}</span>
+      </a>`;
+    });
+    block.innerHTML = `<div class="keyword-title">${escHtml(kw)}</div><div class="platform-grid">${linksHtml}</div>`;
+    container.appendChild(block);
+  });
+
+  document.getElementById('resultArea').style.display = 'block';
+}
+
+function openAll() {
+  document.querySelectorAll('.platform-link').forEach(link => window.open(link.href));
+}
+
+function clearAll() {
+  document.getElementById('keywords').value = '';
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('resultArea').style.display = 'none';
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+document.getElementById('keywords').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.metaKey) generate();
+});
+</script>
+</body>
+</html>
