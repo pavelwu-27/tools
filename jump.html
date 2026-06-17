@@ -41,7 +41,7 @@ body::before {
 /* 头部 */
 .header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 48px;
 }
 .header h1 {
   font-size: 36px;
@@ -58,43 +58,6 @@ body::before {
   color: rgba(255,255,255,0.5);
   font-weight: 300;
 }
-
-/* Tab 切换 */
-.tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 32px;
-  background: rgba(255,255,255,0.04);
-  border-radius: 14px;
-  padding: 4px;
-  border: 1px solid rgba(255,255,255,0.06);
-}
-.tab {
-  flex: 1;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 10px;
-  background: transparent;
-  color: rgba(255,255,255,0.4);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s;
-  letter-spacing: 0.3px;
-}
-.tab:hover {
-  color: rgba(255,255,255,0.6);
-  background: rgba(255,255,255,0.03);
-}
-.tab.active {
-  background: rgba(255,255,255,0.08);
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-/* 面板 */
-.panel { display: none; }
-.panel.active { display: block; }
 
 /* 平台标签 */
 .platform-tags {
@@ -296,95 +259,12 @@ button.secondary:hover {
 }
 .platform-name { font-weight: 500; }
 
-/* 京东对照卡片 */
-.jd-lookup-block {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 16px;
-  backdrop-filter: blur(12px);
-  transition: border-color 0.3s;
-}
-.jd-lookup-block:hover {
-  border-color: rgba(228, 57, 60, 0.3);
-}
-.jd-lookup-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.jd-lookup-title .jd-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
-  border-radius: 6px;
-  background: rgba(228, 57, 60, 0.2);
-  color: #ff8a8d;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  flex-shrink: 0;
-}
-.jd-lookup-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 20px;
-  border: 1px solid rgba(228, 57, 60, 0.15);
-  border-radius: 12px;
-  text-decoration: none;
-  color: rgba(255,255,255,0.85);
-  font-size: 15px;
-  font-weight: 500;
-  transition: all 0.25s;
-  background: rgba(228, 57, 60, 0.04);
-}
-.jd-lookup-link:hover {
-  background: rgba(228, 57, 60, 0.1);
-  border-color: rgba(228, 57, 60, 0.3);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(228, 57, 60, 0.2);
-}
-.jd-lookup-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: #e4393c;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  font-weight: 700;
-  color: #fff;
-  flex-shrink: 0;
-}
-.jd-lookup-arrow {
-  margin-left: auto;
-  font-size: 18px;
-  color: rgba(255,255,255,0.3);
-  transition: transform 0.25s;
-}
-.jd-lookup-link:hover .jd-lookup-arrow {
-  transform: translateX(3px);
-  color: #fff;
-}
-
 /* 响应式 */
 @media (max-width: 640px) {
   .container { padding: 40px 16px 60px; }
   .header h1 { font-size: 28px; }
   .platform-grid { grid-template-columns: repeat(2, 1fr); }
   .input-card { padding: 20px; }
-  .tab { padding: 10px 14px; font-size: 13px; }
 }
 
 /* 页脚 */
@@ -404,65 +284,31 @@ button.secondary:hover {
     <p>输入商品关键词，一键搜遍全网竞品</p>
   </div>
 
-  <!-- Tab 切换 -->
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('search')">🔍 竞品全网搜索</button>
-    <button class="tab" onclick="switchTab('jd-lookup')">🎯 竞品搜京东</button>
+  <div class="platform-tags">
+    <span class="platform-tag"><span class="dot" style="background:#e4393c"></span>京东</span>
+    <span class="platform-tag"><span class="dot" style="background:#ff0036"></span>天猫</span>
+    <span class="platform-tag"><span class="dot" style="background:#ff5000"></span>淘宝</span>
+    <span class="platform-tag"><span class="dot" style="background:#e02e24"></span>拼多多</span>
+    <span class="platform-tag"><span class="dot" style="background:#161823"></span>抖音</span>
+    <span class="platform-tag"><span class="dot" style="background:#de3a6e"></span>唯品会</span>
   </div>
 
-  <!-- 面板1：竞品全网搜索 -->
-  <div class="panel active" id="panel-search">
-    <div class="platform-tags">
-      <span class="platform-tag"><span class="dot" style="background:#e4393c"></span>京东</span>
-      <span class="platform-tag"><span class="dot" style="background:#ff0036"></span>天猫</span>
-      <span class="platform-tag"><span class="dot" style="background:#ff5000"></span>淘宝</span>
-      <span class="platform-tag"><span class="dot" style="background:#e02e24"></span>拼多多</span>
-      <span class="platform-tag"><span class="dot" style="background:#161823"></span>抖音</span>
-      <span class="platform-tag"><span class="dot" style="background:#de3a6e"></span>唯品会</span>
-    </div>
-
-    <div class="input-card">
-      <label>输入商品关键词（每行一个）</label>
-      <textarea id="keywords" placeholder="试试输入商品名，例如：&#10;iPhone 15 Pro 256G&#10;海天生抽 1.9L&#10;欧莱雅复颜玻尿酸水乳套装"></textarea>
-      <div class="hint">支持批量输入 · 每行一个关键词 · Cmd+Enter 快捷生成</div>
-    </div>
-
-    <div class="btn-row">
-      <button class="primary" onclick="generate()">🔍 一键搜全网</button>
-      <button class="secondary" onclick="clearSearch()">清空</button>
-    </div>
-
-    <div class="result-area" id="resultArea">
-      <div class="open-all-row">
-        <button onclick="openAll()">↗ 一键打开全部链接</button>
-      </div>
-      <div id="results"></div>
-    </div>
+  <div class="input-card">
+    <label>输入商品关键词（每行一个）</label>
+    <textarea id="keywords" placeholder="试试输入商品名，例如：&#10;iPhone 15 Pro 256G&#10;海天生抽 1.9L&#10;欧莱雅复颜玻尿酸水乳套装"></textarea>
+    <div class="hint">支持批量输入 · 每行一个关键词 · Cmd+Enter 快捷生成</div>
   </div>
 
-  <!-- 面板2：竞品搜京东 -->
-  <div class="panel" id="panel-jd-lookup">
-    <div class="platform-tags">
-      <span class="platform-tag"><span class="dot" style="background:#e4393c"></span>京东搜索</span>
-    </div>
+  <div class="btn-row">
+    <button class="primary" onclick="generate()">🔍 一键搜全网</button>
+    <button class="secondary" onclick="clearAll()">清空</button>
+  </div>
 
-    <div class="input-card">
-      <label>输入竞品商品名称（每行一个）</label>
-      <textarea id="jdKeywords" placeholder="输入竞品平台的商品名称，例如：&#10;康师傅红烧牛肉面 桶装5连包&#10;三只松鼠碧根果210g&#10;花西子空气蜜粉"></textarea>
-      <div class="hint">输入竞品名称，自动在京东搜索对应商品 · Cmd+Enter 快捷生成</div>
+  <div class="result-area" id="resultArea">
+    <div class="open-all-row">
+      <button onclick="openAll()">↗ 一键打开全部链接</button>
     </div>
-
-    <div class="btn-row">
-      <button class="primary" onclick="generateJdLookup()">🎯 搜京东</button>
-      <button class="secondary" onclick="clearJdLookup()">清空</button>
-    </div>
-
-    <div class="result-area" id="jdResultArea">
-      <div class="open-all-row">
-        <button onclick="openAllJd()">↗ 一键打开全部链接</button>
-      </div>
-      <div id="jdResults"></div>
-    </div>
+    <div id="results"></div>
   </div>
 
   <div class="footer">竞品快速跳转工具 · 比价团队内部使用</div>
@@ -478,18 +324,6 @@ const platforms = [
   { name: '唯品会', key: 'vip', color: '#de3a6e', url: kw => `https://www.vip.com/search/index.html?keyword=${encodeURIComponent(kw)}` },
 ];
 
-const jdSearchUrl = kw => `https://search.jd.com/Search?keyword=${encodeURIComponent(kw)}&enc=utf-8`;
-
-/* Tab 切换 */
-function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', (name === 'search' && i === 0) || (name === 'jd-lookup' && i === 1));
-  });
-  document.getElementById('panel-search').classList.toggle('active', name === 'search');
-  document.getElementById('panel-jd-lookup').classList.toggle('active', name === 'jd-lookup');
-}
-
-/* 面板1：全网搜索 */
 function generate() {
   const text = document.getElementById('keywords').value.trim();
   if (!text) return;
@@ -517,55 +351,15 @@ function generate() {
 }
 
 function openAll() {
-  document.querySelectorAll('#panel-search .platform-link').forEach(link => window.open(link.href));
+  document.querySelectorAll('.platform-link').forEach(link => window.open(link.href));
 }
 
-function clearSearch() {
+function clearAll() {
   document.getElementById('keywords').value = '';
   document.getElementById('results').innerHTML = '';
   document.getElementById('resultArea').style.display = 'none';
 }
 
-/* 面板2：竞品搜京东 */
-function generateJdLookup() {
-  const text = document.getElementById('jdKeywords').value.trim();
-  if (!text) return;
-
-  const keywords = text.split('\n').map(s => s.trim()).filter(s => s.length > 0);
-  const container = document.getElementById('jdResults');
-  container.innerHTML = '';
-
-  keywords.forEach(kw => {
-    const block = document.createElement('div');
-    block.className = 'jd-lookup-block';
-    const url = jdSearchUrl(kw);
-    block.innerHTML = `
-      <div class="jd-lookup-title">
-        <span class="jd-badge">竞品 → 京东</span>
-        ${escHtml(kw)}
-      </div>
-      <a class="jd-lookup-link" href="${url}" target="_blank" rel="noreferrer">
-        <span class="jd-lookup-icon">京</span>
-        <span>在京东搜索「${escHtml(kw)}」</span>
-        <span class="jd-lookup-arrow">→</span>
-      </a>`;
-    container.appendChild(block);
-  });
-
-  document.getElementById('jdResultArea').style.display = 'block';
-}
-
-function openAllJd() {
-  document.querySelectorAll('#panel-jd-lookup .jd-lookup-link').forEach(link => window.open(link.href));
-}
-
-function clearJdLookup() {
-  document.getElementById('jdKeywords').value = '';
-  document.getElementById('jdResults').innerHTML = '';
-  document.getElementById('jdResultArea').style.display = 'none';
-}
-
-/* 工具函数 */
 function escHtml(s) {
   const d = document.createElement('div');
   d.textContent = s;
@@ -574,9 +368,6 @@ function escHtml(s) {
 
 document.getElementById('keywords').addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.metaKey) generate();
-});
-document.getElementById('jdKeywords').addEventListener('keydown', e => {
-  if (e.key === 'Enter' && e.metaKey) generateJdLookup();
 });
 </script>
 </body>
