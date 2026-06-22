@@ -290,7 +290,8 @@ button.secondary:hover {
     <span class="platform-tag"><span class="dot" style="background:#ff5000"></span>淘宝</span>
     <span class="platform-tag"><span class="dot" style="background:#e02e24"></span>拼多多</span>
     <span class="platform-tag"><span class="dot" style="background:#161823"></span>抖音</span>
-    <span class="platform-tag"><span class="dot" style="background:#de3a6e"></span>唯品会</span>
+    <span class="platform-tag"><span class="dot" style="background:#ff2442"></span>小红书</span>
+    <span class="platform-tag"><span class="dot" style="background:#ffcc00"></span>美团</span>
   </div>
 
   <div class="input-card">
@@ -321,7 +322,8 @@ const platforms = [
   { name: '淘宝', key: 'taobao', color: '#ff5000', url: kw => `https://s.taobao.com/search?q=${encodeURIComponent(kw)}` },
   { name: '拼多多', key: 'pdd', color: '#e02e24', url: kw => `https://mobile.yangkeduo.com/search_result.html?search_key=${encodeURIComponent(kw)}` },
   { name: '抖音', key: 'douyin', color: '#161823', url: kw => `https://www.douyin.com/search/${encodeURIComponent(kw)}?type=product` },
-  { name: '唯品会', key: 'vip', color: '#de3a6e', url: kw => `https://www.vip.com/search/index.html?keyword=${encodeURIComponent(kw)}` },
+  { name: '小红书', key: 'xhs', color: '#ff2442', url: kw => `https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(kw)}` },
+  { name: '美团', key: 'meituan', color: '#ffcc00', url: kw => `https://h5.waimai.meituan.com/waimai/mindex/search?keyword=${encodeURIComponent(kw)}` },
 ];
 
 function generate() {
